@@ -7,8 +7,8 @@ export interface Workout {
 	id: string;
 	date: string;
 	notes?: string;
-	bodyWeight: number;
-	exercises: Array<Exercise>;
+	//bodyWeight: number;
+	//exercises: Array<Exercise>;
 }
 
 export interface Exercise {
