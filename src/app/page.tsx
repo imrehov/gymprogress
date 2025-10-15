@@ -1,10 +1,9 @@
+import LoginForm from "@/components/LoginForm";
 
-function Header() {
-	return <h1> GYM PROGRESS TRACKER</h1>
+
+export default function LandingPage() {
+	return (
+		<LoginForm />
+	)
 }
-
-export default function Home() {
-	<Header />
-}
-
 
