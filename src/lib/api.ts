@@ -8,7 +8,7 @@ export async function listWorkouts(from: string, to: string) {
 }
 
 export async function createWorkout(payload: { date: string; notes?: string }) {
-	const r = await fetch(`${API}/v1/workouts`, {
+	const r = await fetch(`${API}/workouts`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
