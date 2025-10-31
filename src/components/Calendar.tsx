@@ -5,6 +5,16 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useState } from 'react';
 import { createWorkout } from '@/lib/api';
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogFooter,
+}import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea'; from "@/components/ui/dialog";
 
 export default function WorkoutCalendar() {
 	const [events, setEvents] = useState([
