@@ -16,8 +16,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useRouter } from 'next/navigation';
 
 export default function WorkoutCalendar() {
+	const router = useRouter();
+
 	const [events, setEvents] = useState([
 		{ title: 'Leg Day', date: '2025-10-10' },
 		{ title: 'Push Day', date: '2025-10-12' },
@@ -26,11 +29,13 @@ export default function WorkoutCalendar() {
 	//dialog state
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<string | null>(null);
-	const [notes, setNotes] = useState(' ');
+	const [notes, setNotes] = useState('');
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleCreateWorkout = async () => {
-		if (!selectedDate) return;
+		if (!selectedDate || isSubmitting) return;
 		try {
+			setIsSubmitting(true);
 			const newWorkout = await createWorkout({ date: selectedDate, notes })
 			setEvents((prev) => [
 				...prev,
@@ -38,9 +43,14 @@ export default function WorkoutCalendar() {
 			]);
 			setIsOpen(false);
 			setNotes('');
+
+			router.push(`workouts/${newWorkout.id}`);
 		}
 		catch (err) {
-			console.error('Error creating workouit:', err);
+			console.error('Error creating workout:', err);
+		}
+		finally {
+			setIsSubmitting(false);
 		}
 	};
 
@@ -63,11 +73,11 @@ export default function WorkoutCalendar() {
 					<DialogHeader>
 						<DialogTitle>Log workout</DialogTitle>
 						<DialogDescription>
-							{selectedDate ? `For $(selectedDate}` : 'Pick a date'}
+							{selectedDate} or select another date
 						</DialogDescription>
 					</DialogHeader>
 
-					<div className='hlex flex-col gap-3 mt-2'>
+					<div className='flex flex-col gap-3 mt-2'>
 						<Input
 							type="date"
 							value={selectedDate ?? ''}
@@ -80,10 +90,10 @@ export default function WorkoutCalendar() {
 						/>
 					</div>
 					<DialogFooter className='mt-4'>
-						{/* <Button variant="primary" onClick={() => router.push(`/workouts/${newWorkout.id}`)}> */}
-						{/* 	Add */}
-						{/* </Button> */}
-						<Button variant="secondary" onClick={() => setIsOpen(false)}>
+						<Button onClick={handleCreateWorkout} disabled={isSubmitting}>
+							{isSubmitting ? "Adding..." : "Add"}
+						</Button>
+						<Button variant="secondary" onClick={() => setIsOpen(false)} disabled={isSubmitting}>
 							{/*close the window */}
 							Cancel
 						</Button>
