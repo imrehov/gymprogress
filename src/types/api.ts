@@ -1,28 +1,25 @@
 export interface WeeklySummary {
 	weekStart: string;
-	workouts: Array<Workout>;
+	workouts: Workout[];
 	bodyWeightDelta: number;
 }
 export interface Workout {
 	id: string;
-	date: string;
-	notes?: string;
-	//bodyWeight: number;
-	//exercises: Array<Exercise>;
+	date: string // YYYY-MM-DD;
+	notes?: string | null;
+	bodyWeight: number;
+	exercises: Exercise[];
 }
 
 export interface Exercise {
 	id: string;
-	sets: Array<Set>;
-	lastTime: Set;
-	monthBest: Set;
-	allTimeBest: Set;
+	sets: Set[];
 }
 
 export interface Set {
 	id: string;
 	reps: number;
-	weight?: number;
-	rpe?: number;
+	weight?: number | null;
+	rpe?: number | null;
 }
 
