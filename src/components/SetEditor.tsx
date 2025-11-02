@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from 'next/navigation';
-import { createSet, deleteSet } from '@/lib/api';
+import { createSet, deleteSet } from "@/lib/api";
 import type { Exercise, Set } from '@/types/api';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -22,8 +22,8 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 
 	//simple form state
 	//TODO remove placeholders
-	const [exerciseId, setExerciseId] = useState('PLACEHOLDER');
-	const [reps, setReps] = useState<number>(5);
+	const [exerciseId, setExerciseId] = useState();
+	const [reps, setReps] = useState<number>();
 	const [weight, setWeight] = useState<number | ''>('');
 	const [rpe, setRpe] = useState<number | ''>('');
 
@@ -59,7 +59,7 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 			// router.refresh();
 
 			//reset fields
-			setReps(5);
+			setReps(reps);
 			setRpe('');
 		} finally {
 			setBusy(false);
@@ -93,28 +93,28 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 				<h2 className="font-semibold">Add set</h2>
 				<div className="grid grid-cols-2 md:grid-cols-5 gap-3">
 					<Input
-						placeholder="exercise_idPLACEHOLDER"
+						placeholder="exercise name"
 						value={exerciseId}
 						onChange={e => setExerciseId(e.target.value)}
 					/>
 					<Input
 						type="number"
-						min={1}
-						placeholder="repsPLACEHOLDER"
+						//min={1}
+						placeholder="number of reps"
 						value={reps}
 						onChange={e => setReps(Number(e.target.value))}
 					/>
 					<Input
 						type="number"
 						step="0.5"
-						placeholder="weightPH"
+						placeholder="working weight"
 						value={weight}
 						onChange={e => setWeight(e.target.value === '' ? '' : Number(e.target.value))}
 					/>
 					<Input
 						type="number"
 						step="0.5"
-						placeholder="RPEPH"
+						placeholder="RPE 0-10"
 						value={rpe}
 						onChange={e => setRpe(e.target.value === '' ? '' : Number(e.target.value))}
 					/>
