@@ -1,4 +1,4 @@
-import type { Workout, Set } from "@/types/api";
+import type { Workout, WorkoutSet } from "@/types/api";
 
 const API = "http://localhost:5024"//process.env.NEXT_PUBLIC_API_URL!; // e.g. http://localhost:5000
 
@@ -34,7 +34,7 @@ export async function getWorkout(id: string): Promise<Workout> {
 }
 
 
-export async function createSet(workoutId: string, payload: { exerciseId: string; reps: number; weight?: number; rpe?: number }): Promise<Set> {
+export async function createSet(workoutId: string, payload: { exerciseId: string; reps: number; weight?: number; rpe?: number }): Promise<WorkoutSet> {
 	const r = await fetch(`${API}/v1/workouts/${workoutId}/sets`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },

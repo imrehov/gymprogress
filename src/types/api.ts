@@ -1,8 +1,8 @@
-export interface WeeklySummary {
-	weekStart: string;
-	workouts: Workout[];
-	bodyWeightDelta: number;
-}
+// export interface WeeklySummary {
+// 	weekStart: string;
+// 	workouts: Workout[];
+// 	bodyWeightDelta: number;
+// }
 export interface Workout {
 	id: string;
 	date: string // YYYY-MM-DD;
@@ -23,3 +23,4 @@ export interface WorkoutSet {
 	rpe?: number | null;
 }
 
+export type WorkoutDetail = Workout;
