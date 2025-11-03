@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useRouter } from 'next/navigation';
 import { createSet, deleteSet } from "@/lib/api";
-import type { Exercise, Set } from '@/types/api';
+import type { Exercise, WorkoutSet } from '@/types/api';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,10 +22,10 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 
 	//simple form state
 	//TODO remove placeholders
-	const [exerciseId, setExerciseId] = useState();
-	const [reps, setReps] = useState<number>();
-	const [weight, setWeight] = useState<number | ''>('');
-	const [rpe, setRpe] = useState<number | ''>('');
+	const [exerciseId, setExerciseId] = useState('ex_bench_press');
+	const [reps, setReps] = useState('');
+	const [weight, setWeight] = useState('');
+	const [rpe, setRpe] = useState('');
 
 	const totalSets = useMemo(
 		() => exercises.reduce((acc, e) => acc + e.sets.length, 0),
@@ -33,15 +33,20 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 	);
 
 	async function onAddSet() {
-		if (!exerciseId || !reps || reps < 1) return;
+
+		const repsNum = parseInt(reps || '0', 10);
+		const weightNum = weight === '' ? undefined : Number(weight);
+		const rpeNum = rpe === '' ? undefined : Number(rpe);
+
+		if (!exerciseId || !repsNum) return;
 
 		try {
 			setBusy(true);
-			const newSet: Set = await createSet(workoutId, {
+			const newSet: WorkoutSet = await createSet(workoutId, {
 				exerciseId,
-				reps,
-				weight: weight === '' ? undefined : Number(weight),
-				rpe: rpe === '' ? undefined : Number(rpe),
+				reps: repsNum,
+				weight: weightNum,
+				rpe: rpeNum
 			});
 
 			// add set to local state if missing
@@ -109,14 +114,14 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 						step="0.5"
 						placeholder="working weight"
 						value={weight}
-						onChange={e => setWeight(e.target.value === '' ? '' : Number(e.target.value))}
+						onChange={e => setWeight(e.target.value)}
 					/>
 					<Input
 						type="number"
 						step="0.5"
 						placeholder="RPE 0-10"
 						value={rpe}
-						onChange={e => setRpe(e.target.value === '' ? '' : Number(e.target.value))}
+						onChange={e => setRpe(e.target.value)}
 					/>
 					<Button onClick={onAddSet} disabled={busy}>
 						{busy ? 'Saving...' : 'Add set'}

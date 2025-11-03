@@ -13,10 +13,10 @@ export interface Workout {
 
 export interface Exercise {
 	id: string;
-	sets: Set[];
+	sets: WorkoutSet[];
 }
 
-export interface Set {
+export interface WorkoutSet {
 	id: string;
 	reps: number;
 	weight?: number | null;

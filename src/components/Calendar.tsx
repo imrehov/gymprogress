@@ -28,7 +28,7 @@ export default function WorkoutCalendar() {
 
 	//dialog state
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedDate, setSelectedDate] = useState<string | null>(null);
+	const [selectedDate, setSelectedDate] = useState<string>('');
 	const [notes, setNotes] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -80,7 +80,7 @@ export default function WorkoutCalendar() {
 					<div className='flex flex-col gap-3 mt-2'>
 						<Input
 							type="date"
-							value={selectedDate ?? ''}
+							value={selectedDate}
 							onChange={(e) => setSelectedDate(e.target.value)}
 						/>
 						<Textarea
