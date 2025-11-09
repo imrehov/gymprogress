@@ -95,6 +95,12 @@ export default function WorkoutCalendar() {
 					setSelectedDate(info.dateStr);
 					setIsOpen(true);
 				}}
+				eventClick={(info) => {
+					const workoutId = info.event.id;
+					if (workoutId) {
+						router.push(`/workouts/${workoutId}`);
+					}
+				}}
 			/>
 
 			{/* dialog opens when isOpen = true */}
