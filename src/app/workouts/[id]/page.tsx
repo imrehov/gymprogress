@@ -1,8 +1,15 @@
 import { getWorkout } from "@/lib/api";
 import SetEditor from "@/components/SetEditor";
 
-export default async function WorkoutPage({ params }: { params: { id: string } }) {
-	const w = await getWorkout(params.id); //await the promise here?
+type WorkoutPageParams = {
+	id: string;
+};
+
+export default async function WorkoutPage(props: {
+	params: Promise<WorkoutPageParams>;
+}) {
+	const { id } = await props.params;
+	const w = await getWorkout(id); //await the promise here?
 
 	return (
 		<main className="p-8 space-y-6">
