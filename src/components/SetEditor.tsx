@@ -65,7 +65,7 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 
 			//reset fields
 			setReps(reps);
-			setRpe('');
+			setRpe(rpe);
 		} finally {
 			setBusy(false);
 		}
@@ -125,6 +125,14 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 					/>
 					<Button onClick={onAddSet} disabled={busy}>
 						{busy ? 'Saving...' : 'Add set'}
+					</Button>
+				</div>
+				<div className="flex justify-end mt-6">
+					<Button
+						variant="secondary"
+						onClick={() => router.push('/workout-calendar')}
+					>
+						Return to calendar
 					</Button>
 				</div>
 				<p className="text-sm text-muted-foreground">Total sets: {totalSets}</p>
