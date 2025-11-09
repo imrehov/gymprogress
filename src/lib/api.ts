@@ -33,6 +33,11 @@ export async function getWorkout(id: string): Promise<Workout> {
 	return r.json();
 }
 
+export async function deleteWorkout(id: string): Promise<void> {
+	const r = await fetch(`${API}/v1/workouts/${id}`, { method: 'DELETE' });
+	if (!r.ok) throw new Error(`Failed to delete workout (${r.status})`);
+}
+
 
 export async function createSet(workoutId: string, payload: { exerciseId: string; reps: number; weight?: number; rpe?: number }): Promise<WorkoutSet> {
 	const r = await fetch(`${API}/v1/workouts/${workoutId}/sets`, {

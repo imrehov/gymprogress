@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useRouter } from 'next/navigation';
-import { createSet, deleteSet } from "@/lib/api";
+import { createSet, deleteSet, deleteWorkout } from "@/lib/api";
 import type { Exercise, WorkoutSet } from '@/types/api';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -94,6 +94,29 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 	return (
 		<section className="space-y6">
 			{/* addset form*/}
+			<div className="flex justify-end">
+				<Button
+					onClick={() => router.push('/workout-calendar')}
+				>
+					Return to calendar
+				</Button>
+				<Button variant="destructive"
+					onClick={async () => {
+						if (confirm('Are you sure you want to delete this workout?')) {
+							try {
+								await deleteWorkout(workoutId);
+								router.push('/workout-calendar');
+							}
+							catch (err) {
+								console.error('Failed to delete workout:', err);
+								alert('Failed to delete workout:');
+							}
+						}
+					}}
+				>
+					Delete this workout
+				</Button>
+			</div>
 			<div className="rounded-x1 border p-4 space-y-3">
 				<h2 className="font-semibold">Add set</h2>
 				<div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -107,7 +130,7 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 						//min={1}
 						placeholder="number of reps"
 						value={reps}
-						onChange={e => setReps(Number(e.target.value))}
+						onChange={e => setReps((e.target.value))}
 					/>
 					<Input
 						type="number"
@@ -125,14 +148,6 @@ export default function SetEditor({ workoutId, initialExercises }: Props) {
 					/>
 					<Button onClick={onAddSet} disabled={busy}>
 						{busy ? 'Saving...' : 'Add set'}
-					</Button>
-				</div>
-				<div className="flex justify-end mt-6">
-					<Button
-						variant="secondary"
-						onClick={() => router.push('/workout-calendar')}
-					>
-						Return to calendar
 					</Button>
 				</div>
 				<p className="text-sm text-muted-foreground">Total sets: {totalSets}</p>
