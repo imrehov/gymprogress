@@ -1,4 +1,4 @@
-import type { Workout, WorkoutSet } from "@/types/api";
+import type { Workout, WorkoutSet, WorkoutSummary } from "@/types/api";
 
 const API = "http://localhost:5024"//process.env.NEXT_PUBLIC_API_URL!; // e.g. http://localhost:5000
 
@@ -7,7 +7,7 @@ function assertOk(r: Response) {
 	return r;
 }
 
-export async function listWorkouts(from: string, to: string) {
+export async function listWorkouts(from: string, to: string): Promise<WorkoutSummary[]> {
 	const r = await fetch(`${API}/v1/workouts?from=${from}&to=${to}`, { cache: 'no-store' });
 	//error if no 200 response
 	if (!r.ok) throw new Error(`Failed to load (${r.status})`);

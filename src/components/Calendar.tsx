@@ -3,8 +3,8 @@
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { useState } from 'react';
-import { createWorkout } from '@/lib/api';
+import { useEffect, useState } from 'react';
+import { createWorkout, listWorkouts } from '@/lib/api';
 import {
 	Dialog,
 	DialogContent,
@@ -18,19 +18,39 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useRouter } from 'next/navigation';
 
+type FcEvent = { id: string; title: string; date: string; };
+
 export default function WorkoutCalendar() {
 	const router = useRouter();
 
-	const [events, setEvents] = useState([
-		{ title: 'Leg Day', date: '2025-10-10' },
-		{ title: 'Push Day', date: '2025-10-12' },
-	]);
+	const [events, setEvents] = useState<FcEvent[]>([]);
+	const [range, setRange] = useState<{ start: string; end: string } | null>(null);
 
 	//dialog state
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedDate, setSelectedDate] = useState<string>('');
+	const [selectedDate, setSelectedDate] = useState('');
 	const [notes, setNotes] = useState('');
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	useEffect(() => {
+		if (!range) return;
+
+		(async () => {
+			try {
+				const workouts = await listWorkouts(range.start, range.end);
+				setEvents(
+					workouts.map((w) => ({
+						id: w.id,
+						date: w.date,
+						title:
+							w.notes && w.notes.trim().length > 0 ? w.notes : `workout on ${w.date}`,
+					}))
+				);
+			} catch (e) {
+				console.error('Failed to load workouts for calendar', e);
+			}
+		})();
+	}, [range]);
 
 	const handleCreateWorkout = async () => {
 		if (!selectedDate || isSubmitting) return;
@@ -39,7 +59,12 @@ export default function WorkoutCalendar() {
 			const newWorkout = await createWorkout({ date: selectedDate, notes })
 			setEvents((prev) => [
 				...prev,
-				{ title: newWorkout.notes || 'Workout', date: newWorkout.date },
+				{
+					id: newWorkout.id,
+					date: newWorkout.date,
+					title:
+						newWorkout.notes && newWorkout.notes.trim().length > 0 ? newWorkout.notes : `workout on ${newWorkout.date}`,
+				},
 			]);
 			setIsOpen(false);
 			setNotes('');
@@ -61,9 +86,14 @@ export default function WorkoutCalendar() {
 				initialView="dayGridMonth"
 				events={events}
 				height="auto"
+				datesSet={(info) => {
+					const start = info.startStr.slice(0, 10);
+					const end = info.endStr.slice(0, 10);
+					setRange({ start, end });
+				}}
 				dateClick={(info) => {
-					setSelectedDate(info.dateStr); //save clicked date
-					setIsOpen(true); //open the dialog
+					setSelectedDate(info.dateStr);
+					setIsOpen(true);
 				}}
 			/>
 
