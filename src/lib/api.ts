@@ -7,8 +7,19 @@ function assertOk(r: Response) {
 	return r;
 }
 
+
+//auth stuff, need to add this to funcs
+//this is how cookies get sent
+
+const opts = {
+	credentials: 'include' as const,
+};
+
 export async function listWorkouts(from: string, to: string): Promise<WorkoutSummary[]> {
-	const r = await fetch(`${API}/v1/workouts?from=${from}&to=${to}`, { cache: 'no-store' });
+	const r = await fetch(`${API}/v1/workouts?from=${from}&to=${to}`, {
+		...opts,
+		cache: 'no-store'
+	});
 	//error if no 200 response
 	if (!r.ok) throw new Error(`Failed to load (${r.status})`);
 	return r.json();
@@ -16,6 +27,7 @@ export async function listWorkouts(from: string, to: string): Promise<WorkoutSum
 
 export async function createWorkout(payload: { date: string; notes?: string }) {
 	const r = await fetch(`${API}/v1/workouts`, {
+		...opts,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
@@ -28,19 +40,26 @@ export async function createWorkout(payload: { date: string; notes?: string }) {
 }
 
 export async function getWorkout(id: string): Promise<Workout> {
-	const r = await fetch(`${API}/v1/workouts/${id}`, { cache: 'no-store' });
+	const r = await fetch(`${API}/v1/workouts/${id}`, {
+		...opts,
+		cache: 'no-store'
+	});
 	assertOk(r);
 	return r.json();
 }
 
 export async function deleteWorkout(id: string): Promise<void> {
-	const r = await fetch(`${API}/v1/workouts/${id}`, { method: 'DELETE' });
+	const r = await fetch(`${API}/v1/workouts/${id}`, {
+		...opts,
+		method: 'DELETE'
+	});
 	if (!r.ok) throw new Error(`Failed to delete workout (${r.status})`);
 }
 
 
 export async function createSet(workoutId: string, payload: { exerciseId: string; reps: number; weight?: number; rpe?: number }): Promise<WorkoutSet> {
 	const r = await fetch(`${API}/v1/workouts/${workoutId}/sets`, {
+		...opts,
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload),
@@ -51,6 +70,11 @@ export async function createSet(workoutId: string, payload: { exerciseId: string
 
 
 export async function deleteSet(setId: string): Promise<void> {
-	const r = await fetch(`${API}/v1/sets/${setId}`, { method: 'DELETE' });
+	const r = await fetch(`${API}/v1/sets/${setId}`, {
+		...opts,
+		method: 'DELETE'
+	});
 	assertOk(r);
 }
+
+
