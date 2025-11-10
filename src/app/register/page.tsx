@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -33,9 +34,13 @@ export default function LoginPage() {
 		}
 	}
 
+	function loginInstead() {
+		router.push('/login');
+	}
+
 	return (
 		<main className="p-8 max-w-md mx-auto">
-			<h1 className="text-2xl font-bold mb-4">Log in</h1>
+			<h1 className="text-2xl font-bold mb-4">Register</h1>
 			<form className="space-y-4" onSubmit={handleSubmit}>
 				<input
 					className="border rounded px-2 py-1 w-full"
@@ -47,7 +52,7 @@ export default function LoginPage() {
 				<input
 					className="border rounded px-2 py-1 w-full"
 					type="password"
-					placeholder="password"
+					placeholder="min. 6 characters"
 					value={password}
 					onChange={e => setPassword(e.target.value)}
 				/>
@@ -59,7 +64,13 @@ export default function LoginPage() {
 				>
 					{busy ? 'Registering…' : 'Register'}
 				</button>
+				<Button className="flex"
+					variant={"secondary"}
+					onClick={loginInstead}
+				>
+					Login instead
+				</Button>
 			</form>
-		</main>
+		</main >
 	);
 }

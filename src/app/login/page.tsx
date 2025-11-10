@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
 	const router = useRouter();
@@ -33,6 +34,10 @@ export default function LoginPage() {
 		}
 	}
 
+	function registerInstead() {
+		router.push('/register');
+	}
+
 	return (
 		<main className="p-8 max-w-md mx-auto">
 			<h1 className="text-2xl font-bold mb-4">Log in</h1>
@@ -59,6 +64,12 @@ export default function LoginPage() {
 				>
 					{busy ? 'Logging in…' : 'Log in'}
 				</button>
+				<Button className="flex"
+					variant={"secondary"}
+					onClick={registerInstead}
+				>
+					Register instead
+				</Button>
 			</form>
 		</main>
 	);
