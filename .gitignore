@@ -1,0 +1,29 @@
+prompts/
+PROJECT_OVERVIEW.md
+
+# .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+.vs/
+
+# Node / Angular
+node_modules/
+dist/
+.angular/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database & Storage (SQLite)
+*.db
+*.db-shm
+*.db-wal
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+appsettings*.Development.json
