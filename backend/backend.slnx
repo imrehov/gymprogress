@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/api/" />
+  <Folder Name="/api/shared/" />
+  <Folder Name="/api/shared/data/">
+    <Project Path="api/shared/data/AppDbContext.csproj" />
+  </Folder>
+  <Project Path="api/api.csproj" />
+  <Project Path="tests/tests.csproj" />
+</Solution>
