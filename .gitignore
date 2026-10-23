@@ -27,3 +27,5 @@ yarn-error.log*
 .env.*
 !.env.example
 appsettings*.Development.json
+# VS Code C# Dev Tools - Auto-generated runners
+.vscodecsdt/Runners/

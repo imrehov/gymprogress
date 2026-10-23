@@ -1,12 +1,21 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.scss',
+  imports: [],
   templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
-export class App {
-  protected readonly title = signal('frontend');
+export class App implements OnInit {
+  private http = inject(HttpClient);
+
+  healthStatus = signal<string>('Checking backend...');
+
+  ngOnInit(): void {
+    this.http.get('/api/health', { responseType: 'text' }).subscribe({
+      next: (status) => this.healthStatus.set(`Backend OK: ${status}`),
+      error: (err) => this.healthStatus.set(`Backend failed: ${err.status} ${err.statusText}`),
+    });
+  }
 }
