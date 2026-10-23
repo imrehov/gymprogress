@@ -1,4 +1,7 @@
 using GymProgress.Api.Data;
+using GymProgress.Api;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,14 @@ var connectionString =
 
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(connectionString));
+
+builder.Services.AddIdentityCore<AppUser>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+    .AddRoles<IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>();
+    
 
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
