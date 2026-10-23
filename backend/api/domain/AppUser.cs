@@ -9,5 +9,5 @@ public class AppUser : IdentityUser<Guid>
 
     }
 
-    public string DisplayName { get; set; }
+    public required string DisplayName { get; set; }
 }
