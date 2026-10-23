@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymProgress.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261023200518_InitialIdentityCreate")]
+    [Migration("20261023204550_InitialIdentityCreate")]
     partial class InitialIdentityCreate
     {
         /// <inheritdoc />
@@ -31,6 +31,10 @@ namespace GymProgress.Api.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")

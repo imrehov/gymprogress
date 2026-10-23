@@ -4,8 +4,10 @@ namespace GymProgress.Api;
 
 public class AppUser : IdentityUser<Guid>
 {
-    public AppUser(string userName)
+    public AppUser()
     {
-        UserName = userName;
+
     }
+
+    public string DisplayName { get; set; }
 }
