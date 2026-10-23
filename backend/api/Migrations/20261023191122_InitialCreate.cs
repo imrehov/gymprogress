@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace api.Migrations
+namespace GymProgress.Api.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

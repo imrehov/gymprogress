@@ -1,4 +1,4 @@
-using Api.Shared.Data;
+using GymProgress.Api.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,4 +32,3 @@ app.MapHealthChecks("/api/health");
 
 
 app.Run();
-

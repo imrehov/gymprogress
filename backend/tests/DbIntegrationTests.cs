@@ -1,9 +1,9 @@
-﻿using Api.Shared.Data;
+﻿using GymProgress.Api.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
-namespace Tests;
+namespace GymProgress.Tests;
 
 [TestFixture]
 public class DbIntegrationTests

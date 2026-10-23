@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Api.Shared.Data;
+namespace GymProgress.Api.Data;
 
 public class AppDbContext : DbContext
 {
