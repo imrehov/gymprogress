@@ -10,7 +10,7 @@ public static class Register
 
     public record Response(Guid Id, string Email, string DisplayName);
 
-    public record Result(bool Succeded, Response? Data=null, IEnumerable<string>? Errors=null);
+    public record Result(bool Succeeded, Response? Data=null, IEnumerable<string>? Errors=null);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -62,5 +62,17 @@ public static class Register
             return new Result(true, Data: response);
 
         }
+    }
+
+    public static void MapEndpoint(this IEndpointRouteBuilder app)
+    {
+        app.MapPost("/api/v1/auth/register", async (Command command, ISender sender) =>
+        {
+            var result = await sender.Send(command);
+
+            return result.Succeeded
+                ? Results.Created($"/api/v1/users/{result.Data!.Id}", result.Data)
+                : Results.BadRequest(new { Errors = result.Errors });
+        });
     }
 }
