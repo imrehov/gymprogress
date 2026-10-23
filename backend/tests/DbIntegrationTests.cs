@@ -42,4 +42,34 @@ public class DbIntegrationTests
 
         Assert.That(canConnect, Is.True);
     }
+
+    [Test]
+    public async Task Db_Contains_Identity_Schema()
+    {
+        var expectedTables = new[]
+        {
+            "AspNetUsers",
+            "AspNetRoles",
+            "AspNetUserRoles",
+            "AspNetUserClaims",
+            "AspNetUserLogins",
+            "AspNetUserTokens",
+            "AspNetRoleClaims"
+        };
+
+        var existingTables = new List<string>();
+
+        await using var command = _connection.CreateCommand();
+
+        command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'AspNet%';";
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            existingTables.Add(reader.GetString(0));
+        }
+
+        Assert.That(existingTables, Is.EquivalentTo(expectedTables));
+    }
 }
