@@ -22,7 +22,7 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 })
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<AppDbContext>();
-    
+
 
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
@@ -43,3 +43,8 @@ app.MapHealthChecks("/api/health");
 
 
 app.Run();
+
+public partial class Program
+{
+    
+}
