@@ -40,6 +40,6 @@ public class DbIntegrationTests
 
         var canConnect = await context.Database.CanConnectAsync();
 
-        Assert.That(canConnect, Is.True); 
+        Assert.That(canConnect, Is.True);
     }
 }

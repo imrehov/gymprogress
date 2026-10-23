@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")
                           ?? "Data Source=gymprogress.db"));
 
 builder.Services.AddOpenApi();
