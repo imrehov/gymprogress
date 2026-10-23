@@ -12,7 +12,7 @@ public class DbIntegrationTests
     private DbContextOptions<AppDbContext> _contextOptions = null!;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _connection = new SqliteConnection("Data Source=:memory:");
         _connection.Open();
@@ -23,7 +23,7 @@ public class DbIntegrationTests
 
 
         using var context = new AppDbContext(_contextOptions);
-        context.Database.EnsureCreated();
+        await context.Database.MigrateAsync();
     }
 
     [TearDown]
