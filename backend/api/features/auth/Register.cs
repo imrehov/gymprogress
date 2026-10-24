@@ -10,7 +10,7 @@ public static class Register
 
     public record Response(Guid Id, string Email, string DisplayName);
 
-    public record Result(bool Succeeded, Response? Data=null, IEnumerable<string>? Errors=null);
+    public record Result(bool Succeeded, Response? Data=null, Dictionary<string, string[]>? Errors=null);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -53,7 +53,17 @@ public static class Register
 
             if (!identityResult.Succeeded)
             {
-                var errors = identityResult.Errors.Select(e => e.Description);
+                //changed IEnumerable<string>? Errors to Dictionary<string, string[]>? Errors
+                //this matches validationexcepiton shape
+                var errors = identityResult.Errors
+                    .GroupBy(error => error.Code)
+                    .ToDictionary(
+                        group => group.Key,
+                        group => group
+                            .Select(error => error.Description)
+                            .Distinct()
+                            .ToArray());
+                
                 return new Result(false, Errors: errors);
             }
 
@@ -72,7 +82,7 @@ public static class Register
 
             return result.Succeeded
                 ? Results.Created($"/api/v1/users/{result.Data!.Id}", result.Data)
-                : Results.BadRequest(new { Errors = result.Errors });
+                : Results.ValidationProblem(result.Errors!);
         });
     }
 }
