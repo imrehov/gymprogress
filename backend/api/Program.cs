@@ -48,6 +48,10 @@ builder.Services.AddTransient(
     typeof(IPipelineBehavior<,>),
     typeof(ValidationBehavior<,>));
 
+//adding validationexception handling
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+
 
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
@@ -63,8 +67,10 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-
 app.MapHealthChecks("/api/health");
+
+//activate the validationexception handler
+app.UseExceptionHandler();
 
 
 Register.MapEndpoint(app);
