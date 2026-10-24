@@ -57,6 +57,39 @@ builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("database");
 
+
+//jwt registering and validation
+
+builder.Services
+    .AddOptions<JwtOptions>()
+    .Bind(builder.Configuration.GetSection(
+        JwtOptions.SectionName))
+    .Validate(
+        options => !string.IsNullOrWhiteSpace(options.Issuer),
+        "JWT issuer is required.")
+    .Validate(
+        options => !string.IsNullOrWhiteSpace(options.Audience),
+        "JWT audience is required.")
+    .Validate(
+        options =>
+            !string.IsNullOrWhiteSpace(options.SigningKey) &&
+            options.SigningKey.Length >= 64,
+        "JWT signing key must contain at least 32 random bytes encoded as hexadecimal.")
+    .Validate(
+        options => options.AccessTokenMinutes > 0,
+        "JWT access-token lifetime must be positive.")
+    .Validate(
+        options => options.RefreshTokenDays > 0,
+        "Refresh-token lifetime must be positive.")
+    .ValidateOnStart();
+
+//replaceable clock so tests dont have to call datetime.utcnow
+builder.Services.AddSingleton(TimeProvider.System);
+
+
+//register tokenservice
+builder.Services.AddSingleton<TokenService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
