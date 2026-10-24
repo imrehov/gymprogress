@@ -16,10 +16,16 @@ public class RegisterIntegrationTests
     private HttpClient _client = null!;
 
     [SetUp]
-    public void SetUp()
+    public async Task SetUp()
     {
         _factory = new CustomWebApplicationFactory();
         _client = _factory.CreateClient();
+
+        await using var scope = _factory.Services.CreateAsyncScope();
+        var database = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        await database.Database.MigrateAsync();
     }
 
     [TearDown]
@@ -27,13 +33,6 @@ public class RegisterIntegrationTests
     {
         _client.Dispose();
         _factory.Dispose();
-    }
-
-    // Helper to query the DB in the test
-    private async Task<AppDbContext> GetDbContextAsync()
-    {
-        var scope = _factory.Services.CreateScope();
-        return scope.ServiceProvider.GetRequiredService<AppDbContext>();
     }
 
     // 1. Valid registration returns 201 and safe user data
@@ -54,8 +53,14 @@ public class RegisterIntegrationTests
         Assert.That(body.DisplayName, Is.EqualTo("John Doe"));
 
         // 2. Assert user exists in DB
-        await using var db = await GetDbContextAsync();
-        var user = await db.Users.FirstOrDefaultAsync(u => u.Email == "john@example.com");
+        await using var scope = _factory.Services.CreateAsyncScope();
+
+        var database = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        var user = await database.Users
+            .SingleOrDefaultAsync(user =>
+                user.Email == "john@example.com");
         Assert.That(user, Is.Not.Null);
 
         // 3. Assert password is encrypted/hashed
@@ -75,8 +80,15 @@ public class RegisterIntegrationTests
 
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
 
-        await using var db = await GetDbContextAsync();
-        var userCount = await db.Users.CountAsync();
+        await using var scope = _factory.Services.CreateAsyncScope();
+
+        var database = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        var user = await database.Users
+            .SingleOrDefaultAsync(user =>
+                user.Email == "john@example.com");
+        var userCount = await database.Users.CountAsync();
         Assert.That(userCount, Is.EqualTo(0));
     }
 
@@ -93,8 +105,15 @@ public class RegisterIntegrationTests
         var response2 = await _client.PostAsJsonAsync("/api/v1/auth/register", command2);
         Assert.That(response2.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
 
-        await using var db = await GetDbContextAsync();
-        var count = await db.Users.CountAsync(u => u.Email == "duplicate@example.com");
+        await using var scope = _factory.Services.CreateAsyncScope();
+
+        var database = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        var user = await database.Users
+            .SingleOrDefaultAsync(user =>
+                user.Email == "john@example.com");
+        var count = await database.Users.CountAsync(u => u.Email == "duplicate@example.com");
         Assert.That(count, Is.EqualTo(1));
     }
 }
