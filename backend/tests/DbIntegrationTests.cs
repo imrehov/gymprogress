@@ -72,4 +72,28 @@ public class DbIntegrationTests
 
         Assert.That(existingTables, Is.EquivalentTo(expectedTables));
     }
+
+    [Test]
+    public async Task Db_Contains_RefreshTokens()
+    {
+        var expectedTables = new[]
+        {
+            "RefreshTokens"
+        };
+
+        var existingTables = new List<string>();
+
+        await using var command = _connection.CreateCommand();
+
+        command.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='RefreshTokens';";
+
+        await using var reader = await command.ExecuteReaderAsync();
+
+        while (await reader.ReadAsync())
+        {
+            existingTables.Add(reader.GetString(0));
+        }
+
+        Assert.That(existingTables, Is.EquivalentTo(expectedTables));
+    }
 }
