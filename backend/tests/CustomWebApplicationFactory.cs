@@ -18,6 +18,7 @@ public sealed class CustomWebApplicationFactory
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        //test secret
         builder.ConfigureAppConfiguration((_, configuration) =>
 {
             configuration.AddInMemoryCollection(

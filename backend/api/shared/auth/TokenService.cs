@@ -11,6 +11,7 @@ namespace GymProgress.Api;
 
 public sealed record IssuedTokens(
     string AccessToken,
+    DateTime AccessTokenExpiresAtUtc, //login response has to tell frontend when token expires
     string RawRefreshToken, //goes into the cookie
     RefreshToken RefreshToken); //refreshtoken.tokenhash goes into sqlite
 public sealed class TokenService
@@ -32,6 +33,9 @@ public sealed class TokenService
         Guid? familyId = null)
     {
         var now = _timeProvider.GetUtcNow().UtcDateTime;
+
+        var accessTokenExpiresAtUtc = now.AddMinutes(
+            _options.AccessTokenMinutes);
 
         var claims = new List<Claim>
         {
@@ -73,8 +77,7 @@ public sealed class TokenService
             audience: _options.Audience,
             claims: claims,
             notBefore: now,
-            expires: now.AddMinutes(
-                _options.AccessTokenMinutes),
+            expires: accessTokenExpiresAtUtc,
             signingCredentials: new SigningCredentials(
                 signingKey,
                 SecurityAlgorithms.HmacSha256));
@@ -98,6 +101,7 @@ public sealed class TokenService
 
         return new IssuedTokens(
             accessToken,
+            accessTokenExpiresAtUtc,
             rawRefreshToken,
             refreshToken);
     }
