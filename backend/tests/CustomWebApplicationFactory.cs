@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace GymProgress.Tests;
 
@@ -17,6 +18,15 @@ public sealed class CustomWebApplicationFactory
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration((_, configuration) =>
+{
+            configuration.AddInMemoryCollection(
+                new Dictionary<string, string?>
+                {
+                    ["Jwt:SigningKey"] = new string('A', 64)
+                });
+        });
+
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<AppDbContext>();

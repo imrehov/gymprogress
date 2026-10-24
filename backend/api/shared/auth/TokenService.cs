@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace GymProgress.Api;
 
@@ -50,7 +51,7 @@ public sealed class TokenService
                 JwtRegisteredClaimNames.Iat,
                 new DateTimeOffset(now)
                     .ToUnixTimeSeconds()
-                    .ToString(),
+                    .ToString(CultureInfo.InvariantCulture),
                 ClaimValueTypes.Integer64)
         };
 
@@ -61,8 +62,11 @@ public sealed class TokenService
                 user.Email));
         }
 
+        var signingKeyBytes =
+            Convert.FromHexString(_options.SigningKey);
+
         var signingKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_options.SigningKey));
+            signingKeyBytes);
 
         var jwt = new JwtSecurityToken(
             issuer: _options.Issuer,

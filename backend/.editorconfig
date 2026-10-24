@@ -1,0 +1,2 @@
+[api/Migrations/*.cs]
+dotnet_diagnostic.CA1861.severity = none
