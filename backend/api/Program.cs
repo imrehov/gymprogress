@@ -67,6 +67,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("database");
 
+//add for currentuser
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+
 
 //jwt registering and validation
 
@@ -83,8 +87,8 @@ builder.Services
     .Validate(
         options =>
             !string.IsNullOrWhiteSpace(options.SigningKey) &&
-            options.SigningKey.Length >= 64,
-        "JWT signing key must contain at least 32 random bytes encoded as hexadecimal.")
+            options.SigningKey.Length == 64,
+        "JWT signing key must contain exactly 32 random bytes encoded as hexadecimal.")
     .Validate(
         options => options.AccessTokenMinutes > 0,
         "JWT access-token lifetime must be positive.")

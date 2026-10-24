@@ -171,7 +171,6 @@ public static class Login
                     result.RawRefreshToken!,
                     new CookieOptions
                     {
-                        //change this later(angualr cannot read this), to either Secure, or SameSite.Strict
                         HttpOnly = true,
 
                         Secure =
