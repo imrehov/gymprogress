@@ -163,11 +163,12 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 Register.MapEndpoint(app);
+Login.MapEndpoint(app);
 
 
 app.Run();
 
 public partial class Program
 {
-    
+
 }

@@ -18,9 +18,12 @@ public sealed class CustomWebApplicationFactory
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        //login cookies will be marked secure
+        builder.UseEnvironment("Testing");
+
         //test secret
         builder.ConfigureAppConfiguration((_, configuration) =>
-{
+        {
             configuration.AddInMemoryCollection(
                 new Dictionary<string, string?>
                 {

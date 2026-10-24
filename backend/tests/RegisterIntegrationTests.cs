@@ -77,7 +77,7 @@ public class RegisterIntegrationTests
         Assert.That(user!.PasswordHash, Is.Not.Null);
     }
 
-// 4. Invalid email or blank display name returns 400 and creates no user
+    // 4. Invalid email or blank display name returns 400 and creates no user
     [TestCase("notanemail", "ValidPass1!", "John")]
     [TestCase("valid@example.com", "ValidPass1!", "")]
     public async Task Register_InvalidPayload_ReturnsBadRequest_AndCreatesNoUser(
@@ -98,7 +98,7 @@ public class RegisterIntegrationTests
         Assert.That(userCount, Is.EqualTo(0));
     }
 
-// 5. Registering the same email twice returns 400 and leaves one user
+    // 5. Registering the same email twice returns 400 and leaves one user
     [Test]
     public async Task Register_DuplicateEmail_ReturnsBadRequest_AndLeavesOneUser()
     {

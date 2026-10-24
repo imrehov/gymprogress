@@ -84,7 +84,7 @@ public class TokenServiceTests
             ValidateAudience = true,
             ValidAudience = _options.Value.Audience,
 
-        ValidateIssuerSigningKey = true,
+            ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Convert.FromHexString(
                     _options.Value.SigningKey)),

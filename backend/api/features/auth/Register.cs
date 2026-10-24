@@ -10,7 +10,7 @@ public static class Register
 
     public record Response(Guid Id, string Email, string DisplayName);
 
-    public record Result(bool Succeeded, Response? Data=null, Dictionary<string, string[]>? Errors=null);
+    public record Result(bool Succeeded, Response? Data = null, Dictionary<string, string[]>? Errors = null);
 
     public class Validator : AbstractValidator<Command>
     {
@@ -63,7 +63,7 @@ public static class Register
                             .Select(error => error.Description)
                             .Distinct()
                             .ToArray());
-                
+
                 return new Result(false, Errors: errors);
             }
 
