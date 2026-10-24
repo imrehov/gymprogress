@@ -5,6 +5,10 @@ using MediatR;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +22,17 @@ var connectionString =
 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(connectionString));
 
+//identity stuff
 builder.Services.AddIdentityCore<AppUser>(options =>
 {
     options.User.RequireUniqueEmail = true;
+    //add signinmanager, it supports the lockout system from identity
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
 })
     .AddRoles<IdentityRole<Guid>>()
+    .AddSignInManager()
     .AddEntityFrameworkStores<AppDbContext>();
 
 
