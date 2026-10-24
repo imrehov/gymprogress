@@ -63,7 +63,17 @@ public class RegisterIntegrationTests
                 user.Email == "john@example.com");
         Assert.That(user, Is.Not.Null);
 
-        // 3. Assert password is encrypted/hashed
+        // 3. Assert password is encrypted/hashed, and valid
+
+        var userManager = scope.ServiceProvider
+            .GetRequiredService<UserManager<AppUser>>();
+
+        var passwordIsValid = await userManager.CheckPasswordAsync(
+            user!,
+            "P@ssword123!");
+
+        Assert.That(passwordIsValid, Is.True);
+
         Assert.That(user!.PasswordHash, Is.Not.Null);
         Assert.That(user.PasswordHash, Is.Not.EqualTo("P@ssword123!"));
     }
