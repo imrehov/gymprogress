@@ -114,7 +114,7 @@ public class DbIntegrationTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
         var familyId = Guid.NewGuid();
         var token = new RefreshToken
         {
@@ -152,7 +152,7 @@ public class DbIntegrationTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
         var token1 = new RefreshToken
         {
             UserId = user.Id,
@@ -192,7 +192,7 @@ public class DbIntegrationTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
         var token = new RefreshToken
         {
             UserId = user.Id,
@@ -221,7 +221,7 @@ public class DbIntegrationTests
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        var now = DateTimeOffset.UtcNow;
+        var now = DateTime.UtcNow;
 
         // 1. Create the replacement token first
         var replacementToken = new RefreshToken

@@ -92,14 +92,14 @@ namespace GymProgress.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
+                    b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CreatedByIp")
                         .HasMaxLength(45)
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset>("ExpiresAtUtc")
+                    b.Property<DateTime>("ExpiresAtUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("FamilyId")
@@ -108,7 +108,7 @@ namespace GymProgress.Api.Migrations
                     b.Property<Guid?>("ReplacedByTokenId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTimeOffset?>("RevokedAtUtc")
+                    b.Property<DateTime?>("RevokedAtUtc")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TokenHash")

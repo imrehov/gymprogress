@@ -11,12 +11,12 @@ public sealed class RefreshToken
 
     public Guid FamilyId { get; set; }
 
-    public DateTimeOffset CreatedAtUtc { get; set; }
+    public DateTime CreatedAtUtc { get; set; }
     public string? CreatedByIp { get; set; }
 
-    public DateTimeOffset ExpiresAtUtc { get; set; }
+    public DateTime ExpiresAtUtc { get; set; }
 
-    public DateTimeOffset? RevokedAtUtc { get; set; }
+    public DateTime? RevokedAtUtc { get; set; }
 
     public Guid? ReplacedByTokenId { get; set; }
     public RefreshToken? ReplacedByToken { get; set; }

@@ -19,10 +19,10 @@ namespace GymProgress.Api.Migrations
                     UserId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TokenHash = table.Column<string>(type: "TEXT", maxLength: 64, nullable: false),
                     FamilyId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreatedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedByIp = table.Column<string>(type: "TEXT", maxLength: 45, nullable: true),
-                    ExpiresAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
-                    RevokedAtUtc = table.Column<DateTimeOffset>(type: "TEXT", nullable: true),
+                    ExpiresAtUtc = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    RevokedAtUtc = table.Column<DateTime>(type: "TEXT", nullable: true),
                     ReplacedByTokenId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
