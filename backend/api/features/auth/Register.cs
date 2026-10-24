@@ -76,12 +76,19 @@ public static class Register
 
     public static void MapEndpoint(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/v1/auth/register", async (Command command, ISender sender) =>
+        app.MapPost(
+        "/api/v1/auth/register",
+        async (
+            Command command,
+            ISender sender,
+            CancellationToken cancellationToken) =>
         {
-            var result = await sender.Send(command);
+            var result = await sender.Send(command, cancellationToken);
 
             return result.Succeeded
-                ? Results.Created($"/api/v1/users/{result.Data!.Id}", result.Data)
+                ? Results.Json(
+                    result.Data,
+                    statusCode: StatusCodes.Status201Created)
                 : Results.ValidationProblem(result.Errors!);
         });
     }

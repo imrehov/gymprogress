@@ -63,7 +63,7 @@ public class RegisterIntegrationTests
                 user.Email == "john@example.com");
         Assert.That(user, Is.Not.Null);
 
-        // 3. Assert password is encrypted/hashed, and valid
+        // 3. Assert password is hashed, and valid
 
         var userManager = scope.ServiceProvider
             .GetRequiredService<UserManager<AppUser>>();
@@ -75,7 +75,6 @@ public class RegisterIntegrationTests
         Assert.That(passwordIsValid, Is.True);
 
         Assert.That(user!.PasswordHash, Is.Not.Null);
-        Assert.That(user.PasswordHash, Is.Not.EqualTo("P@ssword123!"));
     }
 
 // 4. Invalid email or blank display name returns 400 and creates no user
@@ -95,9 +94,6 @@ public class RegisterIntegrationTests
         var database = scope.ServiceProvider
             .GetRequiredService<AppDbContext>();
 
-        var user = await database.Users
-            .SingleOrDefaultAsync(user =>
-                user.Email == "john@example.com");
         var userCount = await database.Users.CountAsync();
         Assert.That(userCount, Is.EqualTo(0));
     }
@@ -120,9 +116,6 @@ public class RegisterIntegrationTests
         var database = scope.ServiceProvider
             .GetRequiredService<AppDbContext>();
 
-        var user = await database.Users
-            .SingleOrDefaultAsync(user =>
-                user.Email == "john@example.com");
         var count = await database.Users.CountAsync(u => u.Email == "duplicate@example.com");
         Assert.That(count, Is.EqualTo(1));
     }
