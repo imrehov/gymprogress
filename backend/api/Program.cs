@@ -93,6 +93,49 @@ builder.Services
         "Refresh-token lifetime must be positive.")
     .ValidateOnStart();
 
+// jwt bearer validation config
+builder.Services
+    .AddAuthentication(
+        JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer();
+
+builder.Services
+    .AddOptions<JwtBearerOptions>(
+        JwtBearerDefaults.AuthenticationScheme)
+    .Configure<IOptions<JwtOptions>>(
+        (bearer, jwtOptions) =>
+        {
+            var jwt = jwtOptions.Value;
+
+            bearer.MapInboundClaims = false;
+
+            bearer.TokenValidationParameters =
+                new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = jwt.Issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = jwt.Audience,
+
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(
+                            Convert.FromHexString(
+                                jwt.SigningKey)),
+
+                    ValidateLifetime = true,
+                    RequireExpirationTime = true,
+                    RequireSignedTokens = true,
+
+                    ClockSkew = TimeSpan.FromSeconds(30),
+
+                    NameClaimType = "display_name"
+                };
+        });
+
+builder.Services.AddAuthorization();
+
 //replaceable clock so tests dont have to call datetime.utcnow
 builder.Services.AddSingleton(TimeProvider.System);
 
@@ -115,6 +158,9 @@ app.MapHealthChecks("/api/health");
 //activate the validationexception handler
 app.UseExceptionHandler();
 
+//after jwt is set up; authentication must be before authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
 Register.MapEndpoint(app);
 
