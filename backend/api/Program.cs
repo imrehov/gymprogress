@@ -1,6 +1,8 @@
 using GymProgress.Api.Data;
 using GymProgress.Api;
 
+using MediatR;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,29 @@ builder.Services.AddIdentityCore<AppUser>(options =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 
+//mediatr and fluentvalidation
+
+/*
+request flow:
+Endpoint
+    -> MediatR
+        -> ValidationBehavior
+            -> Register.Handler
+*/
+
+//this adds register.handler
+builder.Services.AddMediatR(configuration =>
+    configuration.RegisterServicesFromAssemblyContaining<Program>());
+
+//this adds register.validator
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
+//this inserts validationbehavior around every mediatr request
+builder.Services.AddTransient(
+    typeof(IPipelineBehavior<,>),
+    typeof(ValidationBehavior<,>));
+
+
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("database");
@@ -40,6 +65,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapHealthChecks("/api/health");
+
+
+Register.MapEndpoint(app);
 
 
 app.Run();
