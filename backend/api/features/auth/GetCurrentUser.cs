@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GymProgress.Api;
 
-public static class Me
+public static class GetCurrentUser
 {
     public sealed record Response(
         Guid Id,

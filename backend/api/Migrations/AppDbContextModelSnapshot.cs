@@ -109,6 +109,7 @@ namespace GymProgress.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("RevokedAtUtc")
+                        .IsConcurrencyToken()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("TokenHash")

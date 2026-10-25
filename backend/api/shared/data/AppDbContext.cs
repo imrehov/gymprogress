@@ -16,6 +16,11 @@ public class AppDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
 
         var refreshToken = builder.Entity<RefreshToken>();
 
+        //optimistic concurrency for EF -> 2 simultaneous requests cannot rotate the same token successfully
+        refreshToken
+            .Property(token => token.RevokedAtUtc)
+            .IsConcurrencyToken();
+
         //sha256 hex needs 64chars
         refreshToken.Property(token => token.TokenHash)
             .HasMaxLength(64)

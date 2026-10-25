@@ -87,7 +87,7 @@ builder.Services
     .Validate(
         options =>
             !string.IsNullOrWhiteSpace(options.SigningKey) &&
-            options.SigningKey.Length == 64,
+            options.SigningKey.Length == 64 && options.SigningKey.All(Uri.IsHexDigit),
         "JWT signing key must contain exactly 32 random bytes encoded as hexadecimal.")
     .Validate(
         options => options.AccessTokenMinutes > 0,
@@ -168,6 +168,8 @@ app.UseAuthorization();
 
 Register.MapEndpoint(app);
 Login.MapEndpoint(app);
+GetCurrentUser.MapEndpoint(app);
+Refresh.MapEndpoint(app);
 
 
 app.Run();
