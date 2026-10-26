@@ -1,8 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { AuthStore } from './auth.store';
 
@@ -12,11 +9,7 @@ describe('AuthStore', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        AuthStore,
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
+      providers: [AuthStore, provideHttpClient(), provideHttpClientTesting()],
     });
 
     store = TestBed.inject(AuthStore);

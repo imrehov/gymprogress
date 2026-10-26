@@ -1,11 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import {
-  AuthUser,
-  LoginCredentials,
-  LoginResponse,
-} from './auth.models';
+import { AuthUser, LoginCredentials, LoginResponse } from './auth.models';
 
 @Injectable({ providedIn: 'root' })
 export class AuthStore {
@@ -15,20 +11,14 @@ export class AuthStore {
   readonly accessToken = signal<string | null>(null);
   readonly isLoading = signal(false);
 
-  readonly isAuthenticated = computed(
-    () => this.currentUser() !== null,
-  );
+  readonly isAuthenticated = computed(() => this.currentUser() !== null);
 
   async login(credentials: LoginCredentials): Promise<void> {
     this.isLoading.set(true);
 
     try {
       const response = await firstValueFrom(
-        this.http.post<LoginResponse>(
-          '/api/v1/auth/login',
-          credentials,
-          { withCredentials: true },
-        ),
+        this.http.post<LoginResponse>('/api/v1/auth/login', credentials, { withCredentials: true }),
       );
 
       this.accessToken.set(response.accessToken);

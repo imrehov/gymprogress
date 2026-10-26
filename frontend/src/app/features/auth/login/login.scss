@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.login-page {
+  display: grid;
+  min-height: 100%;
+  padding: 1rem;
+  place-items: center;
+}
+
+.login-card {
+  width: min(100%, 26rem);
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-card-actions {
+  padding: 0 1rem 1rem;
+}
+
+button[type='submit'] {
+  display: flex;
+  width: 100%;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.submit-error {
+  color: var(--mat-sys-error);
+  margin: 0;
+}
