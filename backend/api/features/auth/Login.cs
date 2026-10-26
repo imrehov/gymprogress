@@ -166,25 +166,11 @@ public static class Login
                     return Results.Unauthorized();
                 }
 
-                httpContext.Response.Cookies.Append(
-                    RefreshCookieName,
+                RefreshTokenCookie.Append(
+                    httpContext.Response,
                     result.RawRefreshToken!,
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-
-                        Secure =
-                            !environment.IsDevelopment(),
-
-                        SameSite = SameSiteMode.Strict,
-
-                        Path = "/api/v1/auth",
-
-                        Expires =
-                            result.RefreshTokenExpiresAtUtc,
-
-                        IsEssential = true
-                    });
+                    result.RefreshTokenExpiresAtUtc!.Value,
+                    secure: !environment.IsDevelopment());
 
                 return Results.Ok(result.Response);
             });

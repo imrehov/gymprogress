@@ -126,8 +126,8 @@ public static class Refresh
                 CancellationToken cancellationToken) =>
             {
                 if (!httpContext.Request.Cookies.TryGetValue(
-                        RefreshCookieName,
-                        out var rawToken) ||
+                    RefreshTokenCookie.Name,
+                    out var rawToken) ||
                     string.IsNullOrWhiteSpace(rawToken))
                 {
                     return Results.Unauthorized();
@@ -141,29 +141,18 @@ public static class Refresh
 
                 if (!result.Succeeded)
                 {
-                    httpContext.Response.Cookies.Delete(
-                        RefreshCookieName,
-                        new CookieOptions
-                        {
-                            Path = "/api/v1/auth"
-                        });
+                    RefreshTokenCookie.Delete(
+                        httpContext.Response,
+                        secure: !environment.IsDevelopment());
 
                     return Results.Unauthorized();
                 }
 
-                httpContext.Response.Cookies.Append(
-                    RefreshCookieName,
+                RefreshTokenCookie.Append(
+                    httpContext.Response,
                     result.RawRefreshToken!,
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Secure = !environment.IsDevelopment(),
-                        SameSite = SameSiteMode.Strict,
-                        Path = "/api/v1/auth",
-                        Expires = result.RefreshTokenExpiresAtUtc,
-                        IsEssential = true
-                    }
-                );
+                    result.RefreshTokenExpiresAtUtc!.Value,
+                    secure: !environment.IsDevelopment());
 
                 return Results.Ok(result.Response);
             });

@@ -76,22 +76,16 @@ public static class Logout
                 CancellationToken cancellationToken) =>
             {
                 httpContext.Request.Cookies.TryGetValue(
-                    RefreshCookieName,
+                    RefreshTokenCookie.Name,
                     out var rawToken);
 
                 await sender.Send(
                     new Command(rawToken),
                     cancellationToken);
 
-                httpContext.Response.Cookies.Delete(
-                    RefreshCookieName,
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Secure = !environment.IsDevelopment(),
-                        SameSite = SameSiteMode.Strict,
-                        Path = "/api/v1/auth"
-                    });
+                RefreshTokenCookie.Delete(
+                    httpContext.Response,
+                    secure: !environment.IsDevelopment());
 
                 return Results.NoContent();
             }    
