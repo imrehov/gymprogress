@@ -9,7 +9,6 @@ namespace GymProgress.Api;
 
 public static class Login
 {
-    private const string RefreshCookieName = "gymprogress.refresh_token";
     public sealed record Request(
         string Email,
         string Password);

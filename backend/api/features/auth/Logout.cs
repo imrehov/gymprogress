@@ -7,8 +7,6 @@ namespace GymProgress.Api;
 
 public static class Logout
 {
-    private const string RefreshCookieName =
-        "gymprogress.refresh_token";
 
     //nullable token, because logging out without a cookie is valid
     public sealed record Command(

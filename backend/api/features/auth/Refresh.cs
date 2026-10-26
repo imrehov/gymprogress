@@ -9,8 +9,6 @@ namespace GymProgress.Api;
 
 public static class Refresh
 {
-    private const string RefreshCookieName =
-        "gymprogress.refresh_token";
 
     public sealed record Command(
         string RawRefreshToken,
