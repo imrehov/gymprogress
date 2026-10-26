@@ -14,3 +14,8 @@ export interface LoginResponse {
   accessTokenExpiresAtUtc: string;
   user: AuthUser;
 }
+
+export interface RefreshResponse {
+  accessToken: string;
+  accessTokenExpiresAtUtc: string;
+}
