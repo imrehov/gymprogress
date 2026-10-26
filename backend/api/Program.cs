@@ -170,6 +170,7 @@ Register.MapEndpoint(app);
 Login.MapEndpoint(app);
 GetCurrentUser.MapEndpoint(app);
 Refresh.MapEndpoint(app);
+Logout.MapEndpoint(app);
 
 
 app.Run();
